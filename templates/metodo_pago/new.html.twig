@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New MetodoPago{% endblock %}
+
+{% block body %}
+    <h1>Create new MetodoPago</h1>
+
+    {{ include('metodo_pago/_form.html.twig') }}
+
+    <a href="{{ path('app_metodo_pago_index') }}">back to list</a>
+{% endblock %}
