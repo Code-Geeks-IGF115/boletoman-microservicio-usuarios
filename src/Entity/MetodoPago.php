@@ -25,6 +25,9 @@ class MetodoPago
     #[ORM\Column(length: 255)]
     private ?string $nombrePropietario = null;
 
+    #[ORM\ManyToOne(inversedBy: 'metodosPago')]
+    private ?Usuario $usuario = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class MetodoPago
     public function setNombrePropietario(string $nombrePropietario): self
     {
         $this->nombrePropietario = $nombrePropietario;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?Usuario
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?Usuario $usuario): self
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }
