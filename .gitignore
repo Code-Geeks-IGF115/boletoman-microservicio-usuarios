@@ -72,3 +72,7 @@ APP_SECRET=cfc66b346c542221b95465e08c59e34d
 
 # Embedded web-server pid file
 /.web-server-pid
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
