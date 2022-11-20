@@ -10,7 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Service\ResponseHelper;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\UsuarioRepository;
-
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Symfony\Component\Validator\Constraints\Unique;
 
 class ApiAutenticacionController extends AbstractController
 {
@@ -28,18 +29,24 @@ class ApiAutenticacionController extends AbstractController
         $user = new Usuario();
         $user->setEmail($params["email"]);
 
-
         // hash the password (based on the security.yaml config for the $user class)
         $hashedPassword = $passwordHasher->hashPassword(
             $user,
             $plaintextPassword
         );
         $user->setPassword($hashedPassword);
-        $resultado=$usuarioRepository->save($user, true);
+
+        try{
+            $resultado=$usuarioRepository->save($user, true);
+        }catch(UniqueConstraintViolationException $e){
+            return $this->json([
+                'message' => 'Usuario ya existe'
+            ]);
+        }
 
         return $this->json([
             'message' => 'Usuario Registrado',
-            'user' => $resultado,
+            'user' => $user,
         ]);
     }
 }
