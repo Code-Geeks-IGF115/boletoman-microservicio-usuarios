@@ -26,7 +26,7 @@ class ResponseHelper
         return $response->fromJsonString($result);
     }
 
-    public function responseDatosNoValidos($message=null): JsonResponse
+    public function responseDatosNoValidos($message=null, $statusCode=JsonResponse::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
     {
         if(!$message){
             $message="Datos no válidos.";
@@ -34,7 +34,7 @@ class ResponseHelper
         $response=new JsonResponse();
         $response->headers->set('Access-Control-Allow-Origin', '%env(resolve:CORS_ALLOW_ORIGIN)%');
         $result= $this->serializer->serialize(['message'=>$message],'json');
-        $response->setStatusCode(JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        $response->setStatusCode($statusCode);
         return $response->fromJsonString($result);
     }
 

@@ -49,4 +49,20 @@ class ApiAutenticacionController extends AbstractController
         ]);
     }
 
+    #[Route('/api/login', name: 'api_login')]
+    public function login(Request $request): Response
+    {
+        $user=$this->getUser();
+        if ($user==null) {
+            return $this->json("Usuario o contraseña no válidos",Response::HTTP_UNAUTHORIZED);
+        }
+    
+        $token ="Token Generado";
+
+        return $this->json([
+            'message' => 'Usuario Autenticado',
+            'user'  => $user->getUserIdentifier(),
+            'token' => $token,
+        ]);
+    }
 }
