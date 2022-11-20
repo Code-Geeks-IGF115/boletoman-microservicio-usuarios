@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use App\Service\ResponseHelper;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Repository\UsuarioRepository;
+use Symfony\Component\HttpFoundation\{JsonResponse, Response, Request};
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Symfony\Component\Validator\Constraints\Unique;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Service\ResponseHelper;
+use App\Repository\UsuarioRepository;
 
 class ApiAutenticacionController extends AbstractController
 {
@@ -37,16 +36,17 @@ class ApiAutenticacionController extends AbstractController
         $user->setPassword($hashedPassword);
 
         try{
-            $resultado=$usuarioRepository->save($user, true);
+            $usuarioRepository->save($user, true);
         }catch(UniqueConstraintViolationException $e){
-            return $this->json([
+            return $this->responseHelper->responseDatos([
                 'message' => 'Usuario ya existe'
             ]);
         }
 
-        return $this->json([
+        return $this->responseHelper->responseDatos([
             'message' => 'Usuario Registrado',
             'user' => $user,
         ]);
     }
+
 }
