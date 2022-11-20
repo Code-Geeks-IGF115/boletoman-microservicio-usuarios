@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 #[Route('/metodo/pago')]
 class MetodoPagoController extends AbstractController
 {
+    private ResponseHelper $responseHelper;
     public function __construct(ResponseHelper $responseHelper)
     {
         $this->responseHelper=$responseHelper;
