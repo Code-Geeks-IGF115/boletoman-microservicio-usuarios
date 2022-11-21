@@ -7,6 +7,13 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class ResponseSubscriber implements EventSubscriberInterface
 {
+    private $allow_host;
+
+    public function __construct( $allow_host)
+    {
+        $this->allow_host = $allow_host;
+    }
+
     public static function getSubscribedEvents(): array
     {
         return [ResponseEvent::class => 'onKernelResponse'];
@@ -19,6 +26,6 @@ class ResponseSubscriber implements EventSubscriberInterface
         }
 
         $response = $event->getResponse();
-        $response->headers->set('Access-Control-Allow-Origin', '%env(resolve:CORS_ALLOW_ORIGIN)%');
+        $response->headers->set('Access-Control-Allow-Origin',$this->allow_host );
     }
 }
