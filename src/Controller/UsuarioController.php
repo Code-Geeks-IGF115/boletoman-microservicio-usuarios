@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Usuario;
+use App\Entity\{Usuario};
 use App\Form\UsuarioType;
 use App\Repository\UsuarioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,9 +34,8 @@ class UsuarioController extends AbstractController
         ]);
     }
 
-    #[Route('/{idUsuario}/misBoletos/compra/{idCompra}/boletos/pdf/new', name: 'app_usuario_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UsuarioRepository $usuarioRepository,
-    $idUsuario, $idCompra): Response
+    #[Route('/new', name: 'app_usuario_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, UsuarioRepository $usuarioRepository): JsonResponse
     {
         $usuario = new Usuario();
         $form = $this->createForm(UsuarioType::class, $usuario);
@@ -45,39 +44,41 @@ class UsuarioController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $usuarioRepository->save($usuario, true);
 
-            return $this->redirectToRoute('app_usuario_index', [], Response::HTTP_SEE_OTHER);
+           //return $this->redirectToRoute('app_usuario_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('usuario/new.html.twig', [
-            'usuario' => $usuario,
-            'form' => $form,
-        ]);
+        $usuario = new Usuario();
+        $usuario->setUserr("usuario3");
+        $usuario->setPassword("789");
+        $usuarioRepository->save($usuario, true);
+        return $this->responseHelper->responseDatos($usuario);
     }
 
-    #[Route('/boletos/pdf', name: 'ejemplo_usuario', methods: ['POST'])]
-    public function ejemploUsuario(Request $request): JsonResponse
+    #[Route('/{idUsuario}', name: 'boletos', methods: ['POST'])]
+    public function boletos($idUsuario): JsonResponse
     {
         $mensaje="Hola Mundo!";
         
         try{
             // recibiendo parametros
             //SOY SERVIDOR
-            $parametros=$request->toArray(); 
-            $miNombre=$parametros["nombreCompleto"];
+            //$parametros=$request->toArray(); 
+            //$miCompra=$parametros["idCompra"];
             // contruyendo cliente - AGREGACIÓN - TAMBIÉN SOY CLIENTE
             $response = $this->client->request(
                 'POST', 
-                'https://boletoman-reservaciones.herokuapp.com/sala/de/eventos/ejemplo/servidor', [
+                'https://boletoman-compras.herokuapp.com/compra/'. $idUsuario .'/boletos/pdf'
+                
                 // defining data using an array of parameters
-                'json' => ['miNombre' => $miNombre],
-            ]);
+                //'json' => ['miNombre' => "HOLA"],
+            );
             $resultadosDeConsulta=$response->toArray();
-            $mensaje=$resultadosDeConsulta["message"];
+            $mensaje=$resultadosDeConsulta;
         }catch(Exception $e){
-            return $this->responseHelper->responseDatosNoValidos($mensaje);  
+            return $this->responseHelper->responseDatosNoValidos($e);  
         }
-
-        return $this->responseHelper->responseMessage($mensaje);   
+        //dd($resultadosDeConsulta);
+        return $this->responseHelper->responseDatos($mensaje);   
 
 
     }

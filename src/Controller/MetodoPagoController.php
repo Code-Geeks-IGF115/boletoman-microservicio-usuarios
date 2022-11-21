@@ -49,7 +49,6 @@ class MetodoPagoController extends AbstractController
         }else{
 
             return $this->responseHelper->responseMessage($form->getErrors());
-        
 
         }
 
