@@ -3,13 +3,6 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "post-install-cmd": [
-        "@auto-scripts",
-        "mkdir -p config/jwt",
-        "openssl genrsa -out config/jwt/private.pem 4096",
-        "openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem",
-        "chmod -R 775 config/"
-    ],
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
@@ -74,7 +67,11 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "mkdir -p config/jwt",
+            "openssl genrsa -out config/jwt/private.pem 4096",
+            "openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem",
+            "chmod -R 775 config/"
         ],
         "post-update-cmd": [
             "@auto-scripts"
