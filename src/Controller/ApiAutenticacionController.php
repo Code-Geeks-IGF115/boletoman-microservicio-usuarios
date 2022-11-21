@@ -60,7 +60,7 @@ class ApiAutenticacionController extends AbstractController
         return $this->JWTManager->create($user);
     }
 
-    #[Route('/api/login_check', name: 'api_login_check')]
+    #[Route('/api/login_check', name: 'api_login_check', methods: ['POST'])]
     public function login_check(){}
 
     #[Route('/api/test', name: 'api_test')]
