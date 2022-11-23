@@ -53,6 +53,7 @@ class ApiAutenticacionController extends AbstractController
         return $this->responseHelper->responseDatos([
             'message' => 'Usuario Registrado',
             'token' => $this->getTokenUser($user),
+            'id'=>$user->getId()
         ]);
     }
     public function getTokenUser(UserInterface $user)
@@ -61,20 +62,21 @@ class ApiAutenticacionController extends AbstractController
     }
 
     #[Route('/api/login_check', name: 'api_login_check', methods: ['POST'])]
-    public function login_check(){}
+    // public function login_check(){}
 
-    #[Route('/api/test', name: 'api_test')]
-    public function test(Request $request): JsonResponse
+    #[Route('/api/check', name: 'api_check', methods: ['POST'])]
+    public function check(Request $request): JsonResponse
     {
         $user=$this->getUser();
         if ($user==null) {
             return $this->json("Usuario o contraseña no válidos",Response::HTTP_UNAUTHORIZED);
         }
 
+        // dd();
         return $this->json([
-            'message' => 'TEst',
-            'user'  => $user->getUserIdentifier(),
-            'token'=> $this->getTokenUser($user)
+            // 'email'  => $user->getUserIdentifier(),
+            'token'=> $this->getTokenUser($user),
+            'id'=>$user->getId()
         ]);
     }
 }
