@@ -6,11 +6,13 @@
 
 parameters:
     app.allow_host : '%env(CORS_ALLOW_ORIGIN)%'
+    app.allow_credentials : '%env(CORS_ALLOW_CREDENTIALS)%'
 
 services:
     App\EventSubscriber\ResponseSubscriber:
         arguments:
             $allow_host: '%app.allow_host%'
+            $allow_credentials: '%app.allow_credentials%'
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     # default configuration for services in *this* file

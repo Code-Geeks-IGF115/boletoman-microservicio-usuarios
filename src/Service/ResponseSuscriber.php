@@ -7,11 +7,12 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class ResponseSubscriber implements EventSubscriberInterface
 {
-    private $allow_host;
+    private $allow_host,$allow_credentials;
 
-    public function __construct( $allow_host)
+    public function __construct( $allow_host,$allow_credentials)
     {
         $this->allow_host = $allow_host;
+        $this->allow_credentials = $allow_credentials;
     }
 
     public static function getSubscribedEvents(): array
@@ -27,5 +28,7 @@ class ResponseSubscriber implements EventSubscriberInterface
 
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin',$this->allow_host );
+        $response->headers->set('Access-Control-Allow-Credentials',$this->allow_credentials );
+
     }
 }
